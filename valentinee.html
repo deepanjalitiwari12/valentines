@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Be My Valentine ❤️</title>
+
+<!-- Romantic Brush Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Alex+Brush&display=swap" rel="stylesheet">
+
+<style>
+/* General Body */
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
+  padding-bottom: 120px;
+}
+
+/* Question handwriting */
+#handwriting {
+  margin-top: 60px;
+  font-family: 'Great Vibes', cursive;
+  font-size: 4rem;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 3px solid white;
+  width: 0;
+  text-align: center;
+}
+
+/* Buttons */
+.buttons {
+  position: relative;
+  width: 320px;
+  height: 200px;
+  margin-top: 30px;
+}
+
+button {
+  padding: 15px 30px;
+  font-size: 1.3rem;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  position: absolute;
+  transition: all 0.2s ease;
+}
+
+#yes {
+  background: #ff4d6d;
+  color: white;
+  left: 40px;
+  bottom: 20px;
+}
+
+#no {
+  background: #555;
+  color: white;
+  right: 40px;
+  bottom: 20px;
+}
+
+/* Hearts */
+.heart {
+  position: fixed;
+  font-size: 28px;
+  animation: float 4s linear forwards;
+  pointer-events: none;
+}
+
+@keyframes float {
+  to {
+    transform: translateY(-800px) scale(2);
+    opacity: 0;
+  }
+}
+
+/* Falling roses */
+.petal {
+  position: fixed;
+  top: -40px;
+  font-size: 26px;
+  animation: fall linear infinite;
+  pointer-events: none;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(360deg);
+  }
+}
+
+/* Love Letter Paper */
+#letter {
+  display: none;
+  margin-top: 60px;
+  width: 85%;
+  max-width: 800px;
+  background: #ffffff;
+  padding: 50px;
+  border-radius: 22px;
+  box-shadow:
+    0 20px 40px rgba(0,0,0,0.35),
+    inset 0 0 20px rgba(0,0,0,0.05);
+}
+
+/* Letter Text */
+#letterText {
+  font-family: 'Alex Brush', cursive;
+  font-size: 2.2rem;
+  color: #b11226;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+</style>
+</head>
+
+<body>
+
+<h1 id="handwriting"></h1>
+
+<div class="buttons">
+  <button id="yes">Yes ❤️</button>
+  <button id="no">No 💔</button>
+</div>
+
+<div id="letter">
+  <div id="letterText"></div>
+</div>
+
+<audio id="song" src="song.mp3"></audio>
+
+<script>
+/* Type Question */
+const question = "Will You Be Mine Forever 💘";
+let qi = 0;
+const h = document.getElementById("handwriting");
+
+function typeQuestion() {
+  if (qi < question.length) {
+    h.textContent += question[qi++];
+    h.style.width = qi + "ch";
+    setTimeout(typeQuestion, 120);
+  }
+}
+typeQuestion();
+
+/* NO BUTTON – ESCAPING */
+const noBtn = document.getElementById("no");
+
+function moveNo() {
+  const x = Math.random() * 220;
+  const y = Math.random() * 150;
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+}
+
+noBtn.addEventListener("mouseover", moveNo);
+noBtn.addEventListener("mousedown", moveNo);
+noBtn.addEventListener("touchstart", moveNo);
+noBtn.addEventListener("click", e => {
+  e.preventDefault();
+  moveNo();
+});
+
+setInterval(moveNo, 1500);
+
+/* YES CLICK */
+document.getElementById("yes").addEventListener("click", () => {
+  document.getElementById("song").play();
+  createHearts();
+  showLetter();
+});
+
+/* Hearts Animation */
+function createHearts() {
+  for (let i = 0; i < 50; i++) {
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.innerHTML = "❤️";
+    h.style.left = Math.random() * window.innerWidth + "px";
+    h.style.bottom = "-20px";
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 4000);
+  }
+}
+
+/* Falling Roses */
+setInterval(() => {
+  const p = document.createElement("div");
+  p.className = "petal";
+  p.innerHTML = "🌹";
+  p.style.left = Math.random() * window.innerWidth + "px";
+  p.style.animationDuration = (Math.random() * 3 + 5) + "s";
+  document.body.appendChild(p);
+  setTimeout(() => p.remove(), 8000);
+}, 600);
+
+/* Love Letter Typing */
+const letterContent = `My Dearest MK,
+
+I know it took me longer to make this.
+I couldn't even wish you on Rose Day because of my hectic schedule,
+and I am truly sorry for that.
+
+But this… this is for you.
+
+You always used to say,
+“You never proposed me… I’m not your boyfriend.”
+
+Well—look at us now.
+You clicked Yes, that means a yes to my proposal
+And see… you became my boyfriend.
+
+And now you are mine — completely and forever ❤️
+
+I LOVE YOU
+so, so, so, so, so, so, so, so, so, so, sooooo much 💖😘
+
+Be mine. Always.
+
+Yours lovingly,
+Your Sweetie ❤️💋`;
+
+function showLetter() {
+  document.getElementById("letter").style.display = "block";
+  let i = 0;
+  const box = document.getElementById("letterText");
+
+  const timer = setInterval(() => {
+    box.textContent += letterContent[i++];
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    if (i >= letterContent.length) clearInterval(timer);
+  }, 90);
+}
+</script>
+
+</body>
+</html>
